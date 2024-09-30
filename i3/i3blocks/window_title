@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+title=$(xdotool getactivewindow getwindowname)
+# remove titles that include the app name at the end
+title=${title%—*}
+# remove nvim in beginning of title
+title=${title#nvim }
+# get max line length
+title_length=$(echo "$title" | wc -L)
+max_length=60
+
+if [ $title_length -le $max_length ]; then
+    echo "$title"
+else
+    echo "${title:0:$(($max_length - 3))}..."
+fi

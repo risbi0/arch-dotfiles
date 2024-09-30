@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# this script toggles the display between the laptop monitor and external monitor display
+# applies background image again to match with different resolutions
+# also adjusts the width of the title and the title bar in i3blocks
+
+LAPTOP_DISPLAY="eDP"
+EXTERNAL_DISPLAY="HDMI-A-0"
+
+laptop_title_width=60
+laptop_title_bar_width=600
+external_title_width=150
+external_title_bar_width=1150
+
+revert_title_width() {
+    sed -i "s/$external_title_width/$laptop_title_width/g" ~/.config/i3/i3blocks/window_title
+    sed -i "s/$external_title_bar_width/$laptop_title_bar_width/g" ~/.config/i3/i3blocks.conf
+    i3-msg restart
+}
+
+expand_title_width() {
+    sed -i "s/$laptop_title_width/$external_title_width/g" ~/.config/i3/i3blocks/window_title
+    sed -i "s/$laptop_title_bar_width/$external_title_bar_width/g" ~/.config/i3/i3blocks.conf
+    i3-msg restart
+}
+
+if xrandr | grep 'HDMI-A-0 connected'; then
+    if xrandr --listmonitors | grep 'HDMI-A-0'; then
+        xrandr --output $LAPTOP_DISPLAY --auto --output $EXTERNAL_DISPLAY --off
+        revert_title_width
+    elif xrandr --listmonitors | grep 'eDP'; then
+        xrandr --output $LAPTOP_DISPLAY --off --output $EXTERNAL_DISPLAY --auto
+        expand_title_width
+    fi
+# edge case where connector is disconnected while external monitor is on
+elif xrandr | grep 'eDP connected'; then
+    xrandr --output $LAPTOP_DISPLAY --auto
+    revert_title_width
+fi
+
+# apply bg image again
+feh --bg-fill ~/.config/wallpaper.png

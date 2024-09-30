@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+TEMPFILE=$(mktemp --dry-run $HOME/Screenshots/screenshot-XXXXXX.png)
+scrot "$TEMPFILE"
+xclip -selection clipboard -target image/png -i "$TEMPFILE"

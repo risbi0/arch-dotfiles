@@ -1,0 +1,18 @@
+{
+    "nodes":[
+        {
+            "name": "Discord",
+            "percent": 0.4,
+            "swallows": [
+                { "title": ".*Discord.*" }
+            ]
+        },
+        {
+            "name": "Mercury",
+            "percent": 0.6,
+            "swallows": [
+                { "class": "mercury-default" }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,78 @@
+#!/usr/bin/env bash -e
+
+# set global git configs
+git config --global init.defaultBranch main
+git config --global user.name risbi0
+git config --global user.email 81689588+risbi0@users.noreply.github.com
+
+# set default rust toolchain
+rustup default stable
+
+# install paru
+git clone https://aur.archlinux.org/paru.git
+cd paru
+makepkg -si --nocheck --noconfirm
+
+# download dotfiles
+cd $HOME
+rm -rf .config/{.,}*
+git clone https://github.com/risbi0/arch-dotfiles.git
+mv arch-dotfiles/{.,}* .config/
+rmdir arch-dotfiles
+
+# enable parallel downloads
+sudo sed -i "/^#ParallelDownloads = /c\ParallelDownloads = 10" /etc/pacman.conf
+
+# install packages
+cd $HOME/.config
+sudo pacman -Syu --needed --noconfirm - < pacman_packages.txt
+paru -S --sudoloop --noconfirm - < aur_packages.txt
+# uninstall unneeded packages
+sudo pacman -Rns --noconfirm htop i3status lightdm-gtk-greeter nano
+paru -Rns --noconfirm paru-debug
+
+# remove MS fonts in conflict with Font Awesome icons
+sudo rm /usr/share/fonts/TTF/{Arial{bd,bi,i,},cour{bd,bi,i,},Times{bd,bi,i,},Webdings}.{TTF,ttf}
+fc-cache -fv
+
+# move DM wallpaper to its respective location
+sudo cp space-1.jpg /usr/share/lightdm-webkit/themes/lightdm-webkit-theme-aether/src/img/wallpapers/space-1.jpg
+
+# add cronjobs
+( crontab -l 2>/dev/null;
+    echo "DISPLAY=:0.0"
+    echo "0 18 * * * /usr/bin/redshift -l manual"
+    echo "0 7 * * * pkill redshift"
+) | crontab -
+
+# create desktop files to run from kitty by default
+mkdir -p $HOME/.local/share/applications
+BTOP_DESKTOP_FILE="$HOME/.local/share/applications/btop.desktop"
+cat <<EOF > "$BTOP_DESKTOP_FILE"
+[Desktop Entry]
+Name=btop
+Exec=kitty -e btop
+Type=Application
+EOF
+RANGER_DESKTOP_FILE="$HOME/.local/share/applications/ranger.desktop"
+cat <<EOF > "$RANGER_DESKTOP_FILE"
+[Desktop Entry]
+Name=Ranger
+Exec=kitty -e ranger
+Type=Application
+EOF
+
+# install oh-my-zsh
+cd $HOME
+echo -e "\nexit" | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+cp .config/.zshrc .
+# download oh-my-zsh config
+rm -rf .oh-my-zsh/{.,}*
+git clone https://github.com/risbi0/ohmyzsh.git
+mv ohmyzsh/{.,}* .oh-my-zsh/
+rmdir ohmyzsh
+# set zsh as default shell
+chsh --shell /usr/bin/zsh
+
+# restart system
+reboot

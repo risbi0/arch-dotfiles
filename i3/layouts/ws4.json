@@ -1,0 +1,27 @@
+{
+    "nodes":[
+        {
+            "percent": 0.5,
+            "swallows": [
+                { "class": "kitty" }
+            ]
+        },
+        {
+            "layout": "splitv",
+            "nodes": [
+                {
+                    "percent": 0.5,
+                    "swallows": [
+                        { "class": "kitty2" }
+                    ]
+                },
+                {
+                    "percent": 0.5,
+                    "swallows": [
+                        { "class": "kitty3" }
+                    ]
+                }
+            ]
+        }
+    ]
+}

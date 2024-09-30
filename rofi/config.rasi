@@ -1,0 +1,116 @@
+configuration {
+	font: "SFNS Display 18";
+	location: 0;
+	eh: 2;
+}
+
+* {
+    bg-color:                    rgb(0, 0, 0);
+    text-color:                  rgb(255, 255, 255);
+    focus-text-color:            rgb(223, 180, 123);
+    
+    normal-foreground:           @text-color;
+    alternate-normal-foreground: @text-color;
+    selected-normal-foreground:  @focus-text-color;
+    
+    normal-background:           @bg-color;
+    selected-normal-background:  @bg-color;
+    alternate-normal-background: @bg-color;
+ 
+    border-color:                @bg-color;
+    // search bar bottom border spacing
+    spacing:                     15;
+}
+
+window {
+    width:            100%;
+    height:           100%;
+    background-color: @bg-color;
+    border:           0;
+    // center elements
+    padding:          390px;
+}
+
+mainbox {
+    border:  0;
+    padding: 0;
+}
+
+textbox {
+    text-color: @text-color;
+}
+
+listview {
+    fixed-height: 0;
+    border:       2px solid 0px 0px;
+    border-color: rgb(194, 195, 196);
+    spacing:      0px;
+    scrollbar:    false;
+    padding:      10px 0px 0px 70px;
+}
+
+element {
+    border:  0;
+    padding: 0px;
+    spacing: 20px;
+    cursor: pointer;
+}
+
+element-icon {
+    size: 1.2em;
+    vertical-align: 0.5;
+}
+
+element-text {
+    background-color: inherit;
+    text-color:       inherit;
+    vertical-align:   0.5;
+}
+
+element.normal.normal {
+    background-color: @normal-background;
+    text-color:       @normal-foreground;
+}
+
+element.selected.normal {
+    background-color: @selected-normal-background;
+    text-color:       @selected-normal-foreground;
+}
+
+element.alternate.normal {
+    background-color: @alternate-normal-background;
+    text-color:       @alternate-normal-foreground;
+}
+
+inputbar {
+    spacing:    0;
+    text-color: @normal-foreground;
+    padding:    1px;
+}
+
+case-indicator {
+    spacing:    0;
+    text-color: @normal-foreground;
+}
+
+entry {
+    placeholder: "search";
+    spacing:    0;
+    text-color: @normal-foreground;
+}
+
+prompt {
+    spacing:    0;
+    text-color: @normal-foreground;
+}
+
+inputbar {
+    children:   [prompt, textbox-prompt-colon, entry, case-indicator];
+}
+
+textbox-prompt-colon {
+    expand:     false;
+    str:        ":";
+    margin:     0px 0.3em 0em 0em;
+    text-color: @normal-foreground;
+}

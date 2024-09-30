@@ -1,0 +1,6 @@
+##!/usr/bin/env bash
+
+day=$(date +%a | tr '[:lower:]' '[:upper:]')
+date=$(date '+%Y-%m-%d %H:%M:%S')
+
+echo "$day $date"

@@ -1,0 +1,67 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+
+# init variables
+my $acpi;
+my $status;
+my $percent;
+my $full_text;
+my $bat_number = $ENV{BAT_NUMBER} || 0;
+my $label = $ENV{LABEL} || "";
+
+# read the first line of the "acpi" command output
+open (ACPI, "acpi -b 2>/dev/null | grep 'Battery $bat_number' |") or die "Failed to run acpi: $!";
+$acpi = <ACPI>;
+close(ACPI);
+
+# fail if there's unexpected output or no battery
+if (not defined($acpi)) {
+    exit(0);
+} elsif ($acpi !~ /: ([\w\s]+), (\d+)%/) {
+    die "Unexpected acpi output: $acpi\n";
+}
+
+# extract battery status and percentage
+$status = $1;
+$percent = $2;
+$full_text = "$label$percent%";
+
+my $charge_icon = "";
+if ($status eq 'Charging') {
+	$charge_icon = " ";
+}
+
+# set battery icons
+my $batt_icon;
+if ($percent <= 0) {
+	$batt_icon .= "";
+}
+elsif ($percent <= 25) {
+	$batt_icon .= "";
+}
+elsif ($percent <= 50) {
+	$batt_icon .= "";
+}
+elsif ($percent <= 75) {
+	$batt_icon .= "";
+}
+elsif ($percent <= 100 or $percent > 100) {
+	$batt_icon .= "";
+}
+
+# set color based on battery percentage
+my $color = "#FFF";
+if ($status eq 'Discharging') {
+	if ($percent < 20) {
+	    $color = "#FF0000\n";
+	} elsif ($percent < 40) {
+	    $color = "#FFAE00\n";
+	}
+}
+
+# print final output
+print "$batt_icon $full_text$charge_icon\n\n$color";
+
+exit(0);

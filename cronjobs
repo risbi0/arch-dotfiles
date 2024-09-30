@@ -1,0 +1,3 @@
+DISPLAY=:0.0
+0 18 * * * /usr/bin/redshift -l manual
+0 7 * * * pkill redshift

@@ -1,0 +1,59 @@
+#!/usr/bin/env perl
+# Copyright 2014 Pierre Mavro <deimos@deimos.fr>
+# Copyright 2014 Vivien Didelot <vivien@didelot.org>
+# Copyright 2014 Andreas Guldstrand <andreas.guldstrand@gmail.com>
+# Copyright 2014 Benjamin Chretien <chretien at lirmm dot fr>
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+use strict;
+use warnings;
+use utf8;
+use Getopt::Long;
+
+binmode(STDOUT, ":utf8");
+
+# default values
+my $temperature = -9999;
+
+# Get chip temperature
+open (SENSORS, "sensors -u k10temp-pci-00c3 |") or die;
+while (<SENSORS>) {
+    if (/^\s+temp1_input:\s+[\+]*([\-]*\d+\.\d)/) {
+        $temperature = $1;
+        last;
+    }
+}
+close(SENSORS);
+
+$temperature eq -9999 and die 'Cannot find temperature';
+
+print "$temperature°C\n" x2;
+
+# print colors from 50-92c, interpolating between orange and red hex values
+my $start_color = [0xFF, 0xFF, 0x00];
+my $end_color   = [0xFF, 0x00, 0x00];
+my $t_start = 60;
+my $t_end = 92;
+
+if ($temperature >= $t_start && $temperature <= $t_end) {
+    my $ratio = ($temperature - $t_start) / ($t_end - $t_start);
+    my $r = int($start_color->[0] + $ratio * ($end_color->[0] - $start_color->[0]));
+    my $g = int($start_color->[1] + $ratio * ($end_color->[1] - $start_color->[1]));
+    my $b = int($start_color->[2] + $ratio * ($end_color->[2] - $start_color->[2]));
+    
+    printf("#%02X%02X%02X\n", $r, $g, $b);
+}
+
+exit 0;

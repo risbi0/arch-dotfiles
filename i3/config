@@ -1,0 +1,218 @@
+set $alt Mod1
+set $win Mod4
+
+# reload the configuration file
+bindsym $alt+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $alt+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $alt+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+# start a terminal
+bindsym $alt+Return exec kitty
+
+# kill focused window
+bindsym $alt+Shift+q kill
+
+# search apps
+bindsym $alt+d exec --no-startup-id "rofi -show drun -show-icons -scroll-method 1"
+
+# media controls
+set $refresh_battery_display exec pkill -SIGRTMIN+1 i3blocks
+set $refresh_volume_status exec pkill -SIGRTMIN+2 i3blocks
+#set $refresh_mic_status exec pkill -SIGRTMIN+4 i3blocks
+# audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_volume_status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_volume_status
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_volume_status
+# mute mic
+# TODO: make this work
+# bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_mic_status
+# brightness controls
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +10% && $refresh_battery_display
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 10%- && $refresh_battery_display
+# toggle between primary and external display
+bindsym Shift+Super_L exec --no-startup-id ~/.config/i3/toggle_display
+# screenshot
+bindsym Print exec --no-startup-id ~/.config/i3/screenshot
+# lock screen
+bindsym $win+l exec ~/.config/i3/lock
+
+# change focus
+bindsym $alt+h focus left
+bindsym $alt+j focus down
+bindsym $alt+k focus up
+bindsym $alt+l focus right
+bindsym $alt+Left focus left
+bindsym $alt+Down focus down
+bindsym $alt+Up focus up
+bindsym $alt+Right focus right
+
+# move focused window
+bindsym $alt+Shift+h move left
+bindsym $alt+Shift+j move down
+bindsym $alt+Shift+k move up
+bindsym $alt+Shift+l move right
+
+# alternatively, you can use the cursor keys:
+bindsym $alt+Shift+Left move left
+bindsym $alt+Shift+Down move down
+bindsym $alt+Shift+Up move up
+bindsym $alt+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $alt+b split h
+
+# split in vertical orientation
+bindsym $alt+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $alt+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $alt+s layout stacking
+bindsym $alt+w layout tabbed
+bindsym $alt+e layout toggle split
+
+# toggle tiling / floating
+bindsym $alt+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $alt+space focus mode_toggle
+
+# focus the parent container
+#bindsym $alt+a focus parent
+
+# focus the child container
+#bindsym $alt+d focus child
+
+# workspace names
+set $ws1 "1:"
+set $ws2 "2:"
+set $ws3 "3:"
+set $ws4 "4:"
+set $ws5 "5:"
+set $ws6 "6:"
+set $ws7 "7:"
+set $ws8 "8:"
+set $ws9 "9:"
+set $ws10 "10:"
+
+# switch to workspace
+bindsym $alt+1 workspace $ws1
+bindsym $alt+2 workspace $ws2
+bindsym $alt+3 workspace $ws3
+bindsym $alt+4 workspace $ws4
+bindsym $alt+5 workspace $ws5
+bindsym $alt+6 workspace $ws6
+bindsym $alt+7 workspace $ws7
+bindsym $alt+8 workspace $ws8
+bindsym $alt+9 workspace $ws9
+bindsym $alt+0 workspace $ws10
+
+# move focused container to workspace
+bindsym $alt+Shift+1 move container to workspace $ws1
+bindsym $alt+Shift+2 move container to workspace $ws2
+bindsym $alt+Shift+3 move container to workspace $ws3
+bindsym $alt+Shift+4 move container to workspace $ws4
+bindsym $alt+Shift+5 move container to workspace $ws5
+bindsym $alt+Shift+6 move container to workspace $ws6
+bindsym $alt+Shift+7 move container to workspace $ws7
+bindsym $alt+Shift+8 move container to workspace $ws8
+bindsym $alt+Shift+9 move container to workspace $ws9
+bindsym $alt+Shift+0 move container to workspace $ws10
+
+# assign apps to workspaces
+assign [class="vesktop"] workspace $ws1
+assign [class="mercury-default"] workspace $ws1
+assign [class="Thorium"] workspace $ws2
+assign [class="Spotify"] workspace $ws3
+assign [class="cava"] workspace $ws3
+
+# load layouts
+exec --no-startup-id i3-msg "workspace $ws1; append_layout ~/.config/i3/layouts/ws1.json"
+exec --no-startup-id i3-msg "workspace $ws2; append_layout ~/.config/i3/layouts/ws2.json"
+exec --no-startup-id i3-msg "workspace $ws3; append_layout ~/.config/i3/layouts/ws3.json"
+exec --no-startup-id i3-msg "workspace $ws4; append_layout ~/.config/i3/layouts/ws4.json"
+# load bg
+exec feh --bg-fill ~/.config/wallpaper.png
+# load script
+exec ~/.config/i3/i3blocks/check_headphone
+# load apps
+exec picom
+exec vesktop
+exec mercury-browser
+exec thorium-browser
+exec spotify
+exec cava
+exec --no-startup-id i3-msg "workspace $ws2; exec kitty"
+exec --no-startup-id i3-msg "workspace $ws4; exec kitty -e nvim ~/.config/i3/config"
+exec --no-startup-id i3-msg "workspace $ws4; exec kitty --class kitty2 -e nvim ~/.config/nvim/init.lua"
+exec --no-startup-id i3-msg "workspace $ws4; exec kitty --class kitty3"
+exec --no-startup-id i3-msg "workspace $ws10; exec kitty -e btop"
+
+set $resize ""
+bindsym $alt+r mode $resize
+mode $resize {
+    bindsym h resize shrink width 10 px or 10 ppt
+    bindsym j resize grow height 10 px or 10 ppt
+    bindsym k resize shrink height 10 px or 10 ppt
+    bindsym l resize grow width 10 px or 10 ppt
+
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $alt+r mode "default"
+}
+
+# gaps
+gaps inner 15
+gaps outer 0
+
+bindsym $win+Shift+u gaps inner current plus 5
+bindsym $win+Shift+i gaps inner current minus 5
+bindsym $win+Shift+o gaps outer current plus 5
+bindsym $win+Shift+p gaps outer current minus 5
+
+# colors
+set $bg-color               #232326
+set $inactive-bg-color      #4e4e51
+set $text-color             #e9e7eb
+set $inactive-text-color    #9a96ad
+set $urgent-bg-color        #be5a15
+
+# class                 border              background          text
+client.focused          $bg-color           $bg-color           $text-color
+client.focused_inactive $inactive-bg-color  $inactive-bg-color  $text-color
+client.unfocused        $inactive-bg-color  $inactive-bg-color  $text-color
+client.urgent           $urgent-bg-color    $urgent-bg-color    $text-color
+
+bar {
+    tray_output none
+    status_command i3blocks -c ~/.config/i3/i3blocks.conf
+    font pango: Noto Color Emoji 12, SFNS Display 12
+    position bottom
+    separator_symbol "│"
+    padding 5px 0 5px 5px
+    tray_padding 5px
+    strip_workspace_numbers yes
+    colors {
+        background  $bg-color
+        statusline  $text-color
+        separator   $inactive-text-color
+        # class            border             background         text
+        focused_workspace  $bg-color          $bg-color          #dfb47b
+        inactive_workspace $bg-color          $bg-color          $inactive-text-color
+        urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+    }
+}
+# hide split orientation indicator
+hide_edge_borders both
+
+# title bar
+font pango: Noto Color Emoji 12, SFNS Display 12
+default_border none

@@ -1,0 +1,16 @@
+{
+    "nodes":[
+        {
+            "percent": 0.4,
+            "swallows": [
+                { "class": "kitty" }
+            ]
+        },
+        {
+            "percent": 0.6,
+            "swallows": [
+                { "class": "Thorium-browser" }
+            ]
+        }
+    ]
+}

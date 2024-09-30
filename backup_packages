@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+pacman -Qqen > pacman_packages.txt
+pacman -Qqem > aur_packages.txt
+
+echo "Packages backup done."

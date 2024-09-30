@@ -1,0 +1,17 @@
+{
+    "layout": "splitv",
+    "nodes":[
+        {
+            "percent": 0.8,
+            "swallows": [
+                { "class": "Spotify" }
+            ]
+        },
+        {
+            "percent": 0.2,
+            "swallows": [
+                { "class": "cava" }
+            ]
+        }
+    ]
+}

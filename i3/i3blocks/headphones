@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+icon=""
+
+# check if headphones are plugged in
+headphones=$(pactl list sinks short | grep 'Headphones')
+
+# display headphones if plugged in
+if [ "$headphones" != "" ]; then
+    icon=""
+fi
+
+echo $icon

@@ -1,0 +1,17 @@
+autojump
+cava
+discordo-git
+joplin-desktop
+lightdm-webkit-theme-aether
+mercury-browser-bin
+nyaa
+paru
+phinger-cursors
+python-pipreqs
+speedtest-rs
+spotify
+thorium-browser-bin
+ttf-ms-fonts
+vesktop-bin
+visual-studio-code-bin
+yt-dlp-git
