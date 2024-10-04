@@ -7,7 +7,7 @@ title=${title%—*}
 title=${title#nvim }
 # get max line length
 title_length=$(echo "$title" | wc -L)
-max_length=60
+max_length=150
 
 if [ $title_length -le $max_length ]; then
     echo "$title"
