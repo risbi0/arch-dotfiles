@@ -11,7 +11,7 @@
             "name": "Mercury",
             "percent": 0.6,
             "swallows": [
-                { "class": "mercury-default" }
+                { "class": "librewolf" }
             ]
         }
     ]

@@ -5,11 +5,16 @@ script_to_execute="$HOME/.config/i3/volume.sh"
 # file to store the last state of headphones
 status_file="/tmp/headphone_status"
 
+# init status file
+if [ ! -f "$status_file" ]; then
+    echo "unplugged" > "$status_file"
+fi
+
 check_headphones() {
     local sink_info
     sink_info=$(pactl list sinks short)
 
-    if echo "$sink_info" | grep -q "Headphones"; then
+    if echo "$sink_info" | grep -q -E "Headphones|usb"; then
         echo "Headphones plugged in"
         echo "plugged" > "$status_file"
     elif echo "$sink_info" | grep -q "Speaker"; then
@@ -18,23 +23,22 @@ check_headphones() {
     fi
 }
 
-# init status file
-if [ ! -f "$status_file" ]; then
-    echo "unplugged" > "$status_file"
-fi
-
 while true; do
     current_status=$(cat "$status_file")
+    echo "aaa $current_status"
     check_headphones
+    echo "bbb $current_status"
     new_status=$(cat "$status_file")
 
     # update i3blocks if status changed
     if [ "$current_status" != "$new_status" ]; then
         echo "Status changed to $new_status. Executing script."
-	# update volume display
-	pkill -SIGRTMIN+2 i3blocks
-	# update headphone display
-	pkill -SIGRTMIN+3 i3blocks
+        echo "$new_status" > "$status_file"
+        cat "$status_file"
+        # update volume display
+        pkill -SIGRTMIN+2 i3blocks
+        # update headphone display
+        pkill -SIGRTMIN+3 i3blocks
     fi
 
     sleep 1

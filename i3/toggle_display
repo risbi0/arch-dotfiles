@@ -29,7 +29,8 @@ if xrandr | grep 'HDMI-A-0 connected'; then
         xrandr --output $LAPTOP_DISPLAY --auto --output $EXTERNAL_DISPLAY --off
         revert_title_width
     elif xrandr --listmonitors | grep 'eDP'; then
-        xrandr --output $LAPTOP_DISPLAY --off --output $EXTERNAL_DISPLAY --auto
+        # assumes 1440p 144hz display
+        xrandr --output $LAPTOP_DISPLAY --off --output $EXTERNAL_DISPLAY --mode 2560x1440 --rate 144.00
         expand_title_width
     fi
 # edge case where connector is disconnected while external monitor is on
